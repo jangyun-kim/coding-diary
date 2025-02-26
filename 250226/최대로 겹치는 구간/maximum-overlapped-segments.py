@@ -1,10 +1,8 @@
 N = int(input())
-h = [0 for i in range(210)]
+h = [0 for i in range(110)]
 
 for i in range(N):
     x1, x2 = map(int, input().split())
-    x1 += 100
-    x2 += 200
 
     for j in range(x1, x2):
         h[j] += 1
