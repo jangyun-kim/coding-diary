@@ -1,15 +1,19 @@
-N = int(input())
-h = [0 for i in range(110)]
+OFFSET = 100
+MAX_R = 200
 
-for i in range(N):
-    x1, x2 = map(int, input().split())
+n = int(input())
+segments = [
+    tuple(map(int, input().split()))
+    for _ in range(n)
+]
+checked = [0] * (MAX_R + 1)
 
-    for j in range(x1, x2):
-        h[j] += 1
+for x1, x2 in segments:
+    x1, x2 = x1 + OFFSET, x2 + OFFSET
+    
+    for i in range(x1, x2):
+        checked[i] += 1
 
-answer = 0
-for i in range(110):
-    if answer < h[i]:
-        answer = h[i]
-
-print(answer)
+# 최댓값을 구합니다.
+max_num = max(checked)
+print(max_num)
