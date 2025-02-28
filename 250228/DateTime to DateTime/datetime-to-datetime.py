@@ -1,18 +1,27 @@
 A, B, C = map(int, input().split())
 
-initial_day = 11
-initial_hour = 11
-initial_minute = 11
+day = 11
+hour = 11
+minite = 11
 cnt_time = 0
 cnt_date = 0
 
-# 초기 시각의 총 분
-initial_total_minutes = (initial_day - 1) * 1440 + initial_hour * 60 + initial_minute
+# 흐르는 시간 게산
+while True:
+    if day == A and hour == B and minite == C:
+        break
 
-# 목표 시각의 총 분
-target_total_minutes = (A - 1) * 1440 + B * 60 + C
+    cnt_time += 1
+    minite += 1
 
-# 흐른 시간
-total_time_flow = target_total_minutes - initial_total_minutes
+    if minite == 60:
+        hour += 1
+        minite = 0
+
+    if hour == 24:
+        day += 1
+        hour = 0
+    
+total_time_flow = cnt_time + cnt_date
 
 print(total_time_flow)
