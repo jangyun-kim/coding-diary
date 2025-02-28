@@ -1,27 +1,8 @@
 A, B, C = map(int, input().split())
 
-day = 11
-hour = 11
-minite = 11
-cnt_time = 0
-cnt_date = 0
+total_time_flow = (A * 24 * 60 + B * 60 + C) - (11 * 24 * 60 + 11* 60 + 11)
 
-# 흐르는 시간 게산
-while True:
-    if day == A and hour == B and minite == C:
-        break
-
-    cnt_time += 1
-    minite += 1
-
-    if minite == 60:
-        hour += 1
-        minite = 0
-
-    if hour == 24:
-        day += 1
-        hour = 0
-    
-total_time_flow = cnt_time + cnt_date
-
-print(total_time_flow)
+if total_time_flow < 0:
+    print(-1)
+else: 
+    print(total_time_flow)
