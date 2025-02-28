@@ -1,41 +1,46 @@
-# N (명령의 수) 입력
-N = int(input())
+OFFSET = 1000
+MAX_R = 2000
 
-# 위치를 방문한 횟수를 기록할 딕셔너리
-visited = {}
+# 변수 선언 및 입력
+n = int(input())
+segments = []
 
-# 시작 위치
-current_position = 0
+# 현재 위치
+cur = 0
 
-# 명령에 따른 이동 처리
-for _ in range(N):
-    x, direction = input().split()
-    x = int(x)  # 이동할 크기
-    
-    if direction == 'L':
-        # 왼쪽으로 x만큼 이동
-        for _ in range(x):
-            current_position -= 1
-            # 위치 방문 횟수 증가
-            if current_position in visited:
-                visited[current_position] += 1
-            else:
-                visited[current_position] = 1
-    elif direction == 'R':
-        # 오른쪽으로 x만큼 이동
-        for _ in range(x):
-            current_position += 1
-            # 위치 방문 횟수 증가
-            if current_position in visited:
-                visited[current_position] += 1
-            else:
-                visited[current_position] = 1
+for _ in range(n):
+	distance, direction = tuple(input().split())
+	distance = int(distance)
+	
+	if direction == 'L':
+		# 왼쪽으로 이동할 경우 : cur - distance ~ cur까지 경로 이동
+		section_left = cur - distance
+		section_right = cur
+		cur -= distance
+	else:
+		# 오른쪽으로 이동할 경우 : cur ~ cur + distance까지 경로 이동
+		section_left = cur
+		section_right = cur + distance
+		cur += distance
+	
+	segments.append([section_left, section_right])
 
-# 2번 이상 지나간 구간의 크기 계산
-overlap_count = 0
-for count in visited.values():
-    if count >= 2:
-        overlap_count += 1
+	
+checked = [0] * (MAX_R + 1)
 
-# 2번 이상 지나간 영역의 크기 출력
-print(overlap_count)
+for x1, x2 in segments:
+	# OFFSET을 더해줍니다.
+	x1, x2 = x1 + OFFSET, x2 + OFFSET
+	
+	# 구간을 칠해줍니다.
+	# 구간 단위로 진행하는 문제이므로
+	# x2에 등호가 들어가지 않음에 유의합니다.
+	for i in range(x1, x2):
+		checked[i] += 1
+
+# 2번 이상 지나간 영역의 크기를 구합니다.
+cnt = 0
+for elem in checked:
+	if elem >= 2:
+		cnt += 1
+print(cnt)
