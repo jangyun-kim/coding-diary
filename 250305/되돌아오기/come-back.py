@@ -33,3 +33,5 @@ for i in range(N):
             print(time_flow)
             sys.exit()
 
+# N번 이동했는데도 원점에 도달하지 못한 경우
+print(-1)
