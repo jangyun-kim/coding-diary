@@ -1,68 +1,49 @@
-def area(x1, y1, x2, y2):
-    ##주어진 좌표를 이용하여 직사각형의 넓이를 계산
-    return max(0, (x2 - x1) * (y2 - y1))
+OFFSET = 1000
+MAX_R = 2000
 
-def intersection_area(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2):
-    ##두 직사각형이 겹치는 영역의 넓이를 계산
-    ix1 = max(ax1, bx1)
-    iy1 = max(ay1, by1)
-    ix2 = min(ax2, bx2)
-    iy2 = min(ay2, by2)
+# 변수 선언 및 입력
+n = 2
+rects = [
+    tuple(map(int, input().split()))
+    for _ in range(n)
+]
 
-    # If there is no actual intersection, return 0
-    if ix1 >= ix2 or iy1 >= iy2:
-        return 0, 0, 0, 0  # No valid intersection
+checked = [
+    [0] * (MAX_R + 1)
+    for _ in range(MAX_R + 1)
+]
 
-    return ix1, iy1, ix2, iy2
+for i, (x1, y1, x2, y2) in enumerate(rects, start=1):
+    # OFFSET을 더해줍니다.
+    x1, y1 = x1 + OFFSET, y1 + OFFSET
+    x2, y2 = x2 + OFFSET, y2 + OFFSET
+    
+    # 직사각형에 주어진 순으로 1, 2 번호를 붙여줍니다.
+    # 격자 단위로 진행하는 문제이므로
+    # x2, y2에 등호가 들어가지 않음에 유의합니다.
+    for x in range(x1, x2):
+        for y in range(y1, y2):
+            checked[x][y] = i
 
-def min_covering_rectangle(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2):
-    """Finds the minimum rectangle that covers the remaining part of A after B is placed."""
+# 1, 2 순으로 붙였는데도
+# 아직 숫자 1로 남아있는 곳들 중 최대 최소 x, y 값을 전부 계산합니다.
+min_x, max_x, min_y, max_y = MAX_R, 0, MAX_R, 0
+first_rect_exist = False
+for x in range(MAX_R + 1):
+    for y in range(MAX_R + 1):
+        if checked[x][y] == 1:
+            first_rect_exist = True
+            min_x = min(min_x, x)
+            max_x = max(max_x, x)
+            min_y = min(min_y, y)
+            max_y = max(max_y, y)
 
-    # Get the intersection coordinates
-    ix1, iy1, ix2, iy2 = intersection_area(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2)
+# 넓이를 계산합니다.
+# Case 1. 첫 번째 직사각형이 전혀 남아있지 않다면 넓이는 0입니다.
+if not first_rect_exist:
+    area = 0
+# Case 2. 첫 번째 직사각형이 남아있다면, 넓이를 계산합니다.
+else:
+    area = (max_x - min_x + 1) * (max_y - min_y + 1)
 
-    # If B completely covers A, return 0
-    if (ix1, iy1, ix2, iy2) == (ax1, ay1, ax2, ay2):
-        return 0
-
-    # Remaining parts of A
-    uncovered_regions = []
-
-    # Left part of A (if exists)
-    if ax1 < ix1:
-        uncovered_regions.append((ax1, ay1, ix1, ay2))
-
-    # Right part of A (if exists)
-    if ax2 > ix2:
-        uncovered_regions.append((ix2, ay1, ax2, ay2))
-
-    # Bottom part of A (if exists)
-    if ay1 < iy1:
-        uncovered_regions.append((ax1, ay1, ax2, iy1))
-
-    # Top part of A (if exists)
-    if ay2 > iy2:
-        uncovered_regions.append((ax1, iy2, ax2, ay2))
-
-    # If only one region remains, return its area
-    if len(uncovered_regions) == 1:
-        x1, y1, x2, y2 = uncovered_regions[0]
-        return area(x1, y1, x2, y2)
-
-    # If multiple regions remain, find the minimum bounding rectangle
-    min_x = min(rect[0] for rect in uncovered_regions)
-    min_y = min(rect[1] for rect in uncovered_regions)
-    max_x = max(rect[2] for rect in uncovered_regions)
-    max_y = max(rect[3] for rect in uncovered_regions)
-
-    return area(min_x, min_y, max_x, max_y)
-
-# 입력
-ax1, ay1, ax2, ay2 = map(int, input().split())
-bx1, by1, bx2, by2 = map(int, input().split())
-
-# 최소 직사각형의 넓이 계산
-result = min_covering_rectangle(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2)
-
-# 결과 출력
-print(result)
+print(area)
