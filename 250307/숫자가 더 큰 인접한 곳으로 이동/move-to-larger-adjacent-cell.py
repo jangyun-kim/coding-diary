@@ -6,27 +6,29 @@ for i in range(1, N + 1):
     for j in range(1, N + 1):
         a[i][j] = row[j - 1]
 
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
+def in_range(r, c):
+    return 1 <= r < N and 1 <= c < N
 
+def simulate(r, c):
+    # set dr, dc in order from UDLR 
+    dr = [-1, 1, 0, 0]
+    dc = [0, 0, -1, 1]
 
-x, y = r, c
-
-
-print(a[x][y], end=" ")
+    for k in range(4):
+        nr, nc = r + dr[k], c + dc[k]
+    
+        # nr, nc for searching in the range
+        # if some values are larger than itself, then move and break
+        # (move means the end of the function and recall)
+        if in_range(nr, nc) and a[nr][nc] > a[r][c]:
+            return (nr, nc)
+        
+    # cannot move anymore
+    return (-1, -1)
 
 while True:
-    next_x, next_y = -1, -1
+    print(a[r][c], end=" ")
+    r, c = simulate(r, c)
 
-    for i in range(4):
-        nx, ny = x + dx[i], y + dy[i]
-
-        if 1 <= nx <= N and 1 <= ny <= N and a[nx][ny] > a[x][y]:
-            next_x, next_y = nx, ny
-            break
-
-    if next_x == -1 and next_y == -1:
+    if r == -1 and c == -1:
         break
-
-    x, y = next_x, next_y
-    print(a[x][y], end=" ")
