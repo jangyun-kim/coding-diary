@@ -7,7 +7,7 @@ for i in range(1, N + 1):
         a[i][j] = row[j - 1]
 
 def in_range(r, c):
-    return 1 <= r < N and 1 <= c < N
+    return 1 <= r <= N and 1 <= c <= N
 
 def simulate(r, c):
     # set dr, dc in order from UDLR 
