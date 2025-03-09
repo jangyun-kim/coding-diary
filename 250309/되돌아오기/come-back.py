@@ -1,37 +1,37 @@
-m1, d1, m2, d2 = map(int, input().split())
+import sys
 
-# 기준일의 요일 (2011년 m1월 d1일이 월요일)
-today = 1  # 월요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
-cnt_day = 0  # 날짜 차이 계산
+N = int(input())
+moves = [tuple(input().split()) for _ in range(N)]
+dir = [move[0] for move in moves]
+dist = [int(move[1]) for move in moves]
 
-# 월별 날짜 (2011년은 윤년이 아님)
-date_of_month = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-day_of_week = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+dx = [1, 0, -1, 0]
+dy = [0, -1, 0, 1]
 
-def days_between(m1, d1, m2, d2):
-    ## 두 날짜 사이의 거리(일수)를 반환
-    total_days = 0
-    forward = (m1, d1) < (m2, d2)  ## True이면 m1, d1 → m2, d2 (미래 이동)
+def in_range(x, y):
+    return 0 <= x < N and 0 <= y < N
 
-    while (m1, d1) != (m2, d2):
-        if forward:
-            d1 += 1
-            if d1 > date_of_month[m1]:  ## 월이 넘어가면
-                d1 = 1
-                m1 += 1
-        else:
-            d1 -= 1
-            if d1 < 1:  ## 월이 넘어가면
-                m1 -= 1
-                d1 = date_of_month[m1]
+x, y = 0, 0 # start point
+dir_num = 0 # 0: East, 1: South, 2: West, 3: North
 
-        total_days += 1
+time_flow = 0
+mapper = {
+    'E': 0,
+    'S': 1,
+    'W': 2,
+    'N': 3
+}
 
-    return total_days if forward else -total_days  ## 미래면 양수, 과거면 음수
+# process moves
+for i in range(N):
+    move_dir = mapper[dir[i]]
 
-# 날짜 차이 계산
-cnt_day = days_between(m1, d1, m2, d2)
+    for _ in range(dist[i]):
+        x, y = x + dx[move_dir], y + dy[move_dir]
+        time_flow += 1
+        if x == 0 and y == 0:
+            print(time_flow)
+            sys.exit()
 
-# 최종 요일 계산
-target_day = (today + cnt_day) % 7
-print(day_of_week[target_day])
+# N번 이동했는데도 원점에 도달하지 못한 경우
+print(-1)
