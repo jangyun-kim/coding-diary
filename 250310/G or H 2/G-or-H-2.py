@@ -1,29 +1,36 @@
+MAX_NUM = 100
+
+# 변수 선언 및 입력
 n = int(input())
-people = [tuple(input().split()) for _ in range(n)]
-pos = [int(p[0]) for p in people]
-alpha = [p[1] for p in people]
+arr = [0] * (MAX_NUM + 1)
 
-max_length = 0
-prefix_sum = 0
-index_map = {0: -1}  # First occurrence of each prefix sum
+for _ in range(n):
+    x, c = tuple(input().split())
+    x = int(x)
+    
+    arr[x] = 1 if c == 'G' else 2
 
-start = 0
-for i in range(1, n):
-    if alpha[i] != alpha[start]:  
-        max_length = max(max_length, pos[i - 1] - pos[start])  # Compute segment length
-        start = i  # Start a new segment
+# 모든 구간의 시작점을 잡아봅니다.
+max_len = 0
+for i in range(MAX_NUM + 1):
+	for j in range(i + 1, MAX_NUM + 1):
+		# i와 j 위치에 사람이 있는지 확인합니다.
+		if arr[i] == 0 or arr[j] == 0:
+			continue
+		
+		# 해당 구간 내 g와 h의 개수를 구합니다.
+		cnt_g = 0
+		cnt_h = 0
+		
+		for k in range(i, j + 1):
+			if arr[k] == 1:
+				cnt_g += 1
+			if arr[k] == 2:
+				cnt_h += 1
+		
+		# 조건을 만족할 때 구간의 길이를 구해 최댓값과 비교합니다.
+		if cnt_g == 0 or cnt_h == 0 or cnt_g == cnt_h:
+			leng = j - i
+			max_len = max(max_len, leng)
 
-# Check last contiguous segment
-max_length = max(max_length, pos[n - 1] - pos[start])
-
-# Step 4: Find longest segment where `G` and `H` are balanced using prefix sum
-for i in range(n):
-    prefix_sum += 1 if alpha[i] == 'G' else -1
-
-    if prefix_sum in index_map:
-        max_length = max(max_length, pos[i] - pos[index_map[prefix_sum]])  # Corrected calculation
-    else:
-        index_map[prefix_sum] = i  # Store index instead of position
-
-# Step 5: Print the correct result
-print(max_length)
+print(max_len)
