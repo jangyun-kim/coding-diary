@@ -37,7 +37,6 @@ for a in range(1, 10):
 
             if is_valid:
                 valid_count += 1
-                print(candidate)
 
             
 
