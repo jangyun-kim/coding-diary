@@ -14,7 +14,7 @@ for a in range(1, 10):
             continue
 
         for c in range(1, 10):
-            if c == a and c == b:
+            if c == a or c == b:
                 continue
             
             candidate = f"{a}{b}{c}"
@@ -30,8 +30,12 @@ for a in range(1, 10):
                 common_digits = set(candidate) & set(B_guess)
                 cnt2 = len(common_digits) - cnt1
 
+                if expected_cnt1 == 0 and expected_cnt2 == 0:
+                    if any(d in B_guess for d in candidate):
+                        is_valid = False
+                        break
                 # except from candidate if they don't satisfy the conditions
-                if cnt1 != expected_cnt1 or cnt2 != expected_cnt2:
+                elif cnt1 != expected_cnt1 or cnt2 != expected_cnt2:
                     is_valid = False
                     break # no more check
 
