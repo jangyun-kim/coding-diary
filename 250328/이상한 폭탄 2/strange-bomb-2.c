@@ -18,8 +18,8 @@ int main() {
     int boom = -1;
 
     for (int i = 0; i < N; i++) {
-        for (int j = 1; j + K < N; j++) {
-            if (boombs[i] == boombs[j]) {
+        for (int j = 1; j <= K; j++) {
+            if (boombs[i] == boombs[i + j]) {
                 boom = MAX(boom, boombs[i]);
             }
         }
