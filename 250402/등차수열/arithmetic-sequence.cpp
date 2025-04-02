@@ -34,7 +34,7 @@ int main() {
     int max_count = 0;
     for (int i = 0; i <= MAX_K; i++) {
         if (k_count[i] > max_count) {
-            max_count = k_count[k];
+            max_count = k_count[i];
         }
     }
 
