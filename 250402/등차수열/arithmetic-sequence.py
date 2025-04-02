@@ -1,25 +1,20 @@
 N = int(input())
 a = list(map(int, input().split()))
 
-a_set = set(a)
-k_count = {}
+from collections import defaultdict
+
+k_pair_count = defaultdict(int)
 
 for i in range(N):
     for j in range(i + 1, N):
         total = a[i] + a[j]
         if total % 2 != 0:
-            continue  # 중간값 k가 정수가 아님
+            continue  # 중간값이 정수가 아니면 무시
         k = total // 2
-        if k in a_set:
-            continue  # 리스트에 이미 있는 값은 제외
+        k_pair_count[k] += 1  # k 중심으로 등차쌍 하나 추가
 
-        if k not in k_count:
-            k_count[k] = 1
-        else:
-            k_count[k] += 1
-
-# 최대 등장 개수 출력
-if k_count:
-    print(max(k_count.values()))
+# 최대 쌍 개수 출력
+if k_pair_count:
+    print(max(k_pair_count.values()))
 else:
     print(0)
